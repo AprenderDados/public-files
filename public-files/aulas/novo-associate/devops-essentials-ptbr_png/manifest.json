@@ -1,0 +1,85 @@
+{
+  "title": "DevOps Essentials PT-BR",
+  "source_pdf": "devops-essentials-ptbr.pdf",
+  "page_count": 15,
+  "image_format": "png",
+  "generated_at": "2026-05-28",
+  "remote_base_url": "https://raw.githubusercontent.com/AprenderDados/public-files/main/public-files/aulas/novo-associate/devops-essentials-ptbr_png/",
+  "slides": [
+    {
+      "index": 1,
+      "file": "01_devops_essentials_ptbr.png",
+      "alt": "Slide 1 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 2,
+      "file": "02_devops_essentials_ptbr.png",
+      "alt": "Slide 2 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 3,
+      "file": "03_devops_essentials_ptbr.png",
+      "alt": "Slide 3 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 4,
+      "file": "04_devops_essentials_ptbr.png",
+      "alt": "Slide 4 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 5,
+      "file": "05_devops_essentials_ptbr.png",
+      "alt": "Slide 5 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 6,
+      "file": "06_devops_essentials_ptbr.png",
+      "alt": "Slide 6 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 7,
+      "file": "07_devops_essentials_ptbr.png",
+      "alt": "Slide 7 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 8,
+      "file": "08_devops_essentials_ptbr.png",
+      "alt": "Slide 8 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 9,
+      "file": "09_devops_essentials_ptbr.png",
+      "alt": "Slide 9 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 10,
+      "file": "10_devops_essentials_ptbr.png",
+      "alt": "Slide 10 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 11,
+      "file": "11_devops_essentials_ptbr.png",
+      "alt": "Slide 11 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 12,
+      "file": "12_devops_essentials_ptbr.png",
+      "alt": "Slide 12 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 13,
+      "file": "13_devops_essentials_ptbr.png",
+      "alt": "Slide 13 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 14,
+      "file": "14_devops_essentials_ptbr.png",
+      "alt": "Slide 14 - DevOps Essentials PT-BR"
+    },
+    {
+      "index": 15,
+      "file": "15_devops_essentials_ptbr.png",
+      "alt": "Slide 15 - DevOps Essentials PT-BR"
+    }
+  ]
+}
