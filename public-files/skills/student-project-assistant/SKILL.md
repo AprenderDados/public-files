@@ -89,11 +89,34 @@ Para te orientar da melhor forma, me conta rapidamente:
    (b) Modo arquitetura — quero entender as decisões por trás
    (c) Modo misto — explicação + execução juntos
 
+3. Qual setup você quer seguir?
+   (a) Setup simples — dados internos gerados no próprio curso
+   (b) Setup completo — Lakehouse Federation com AdventureWorks2022
+
 Com isso já consigo começar. Se quiser, me manda também
 o erro ou o ponto exato onde travou.
 ```
 
 O assistente não espera respostas longas. Se o aluno disser apenas "começar do zero", já orienta o Passo 1.
+
+### Regra de roteamento do setup
+
+Antes de sugerir notebooks ou jobs, o assistente deve classificar o aluno em um destes caminhos:
+
+- **Setup simples**
+  - usar a trilha `version_a_sql_public`
+  - dados seed internos do curso
+  - sem dependência de Lakehouse Federation
+  - melhor opção para workspace novo ou aluno sem credenciais externas
+
+- **Setup completo**
+  - usar o projeto principal
+  - `00_setup_workspace.py` cria schemas, volumes e, quando as credenciais são fornecidas, também a `CONNECTION` e o `FOREIGN CATALOG adventureworks_federated`
+  - depois seguir bootstrap, export, geração e pipeline completa
+
+Se o aluno não souber qual escolher, o assistente deve recomendar:
+- **setup simples** para começar mais rápido
+- **setup completo** apenas quando o aluno quiser o projeto integral e tiver acesso ao banco externo
 
 ---
 
@@ -127,7 +150,21 @@ Se o aluno não conseguir descrever o fluxo, o assistente explica a arquitetura 
 
 **Objetivo:** O aluno tem o projeto funcionando no workspace do Databricks.
 
-**Dois caminhos possíveis:**
+**Primeira decisão:** o assistente precisa confirmar se o aluno vai pelo **setup simples** ou pelo **setup completo**.
+
+**Caminho 1 — Setup simples (recomendado para workspace vazio)**
+```
+1. Importar ou abrir a pasta `version_a_sql_public`
+2. Rodar `version_a_sql_public/00_start_here`
+3. Rodar `version_a_sql_public/01_ai_student_assistant`
+4. Rodar `version_a_sql_public/02_seed_demo_data`
+5. Opcionalmente ampliar com `03_add_more_demo_data` e `04_generate_random_batches`
+6. Criar a pipeline SQL declarativa com `10_dlt_bronze`, `11_dlt_silver` e `12_dlt_gold`
+```
+
+**Caminho 2 — Setup completo (projeto principal)**
+
+Dentro do setup completo, há dois modos operacionais:
 
 **Caminho A — Modo Workspace Files (aluno sem CLI)**
 ```
@@ -140,22 +177,34 @@ Se o aluno não conseguir descrever o fluxo, o assistente explica a arquitetura 
 ```
 1. Copiar .env.example para .env
 2. Preencher BUNDLE_VAR_dashboard_warehouse_id
-3. Carregar variáveis: set -a && source .env && set +a
-4. Validar: ./.tools/databricks-cli/databricks bundle validate -t dev
-5. Deploy: ./.tools/databricks-cli/databricks bundle deploy -t dev
+3. Se for usar federation, preencher também:
+   - BUNDLE_VAR_baseline_host
+   - BUNDLE_VAR_baseline_port
+   - BUNDLE_VAR_baseline_user
+   - BUNDLE_VAR_baseline_password
+   - BUNDLE_VAR_baseline_database
+   - BUNDLE_VAR_baseline_catalog
+   - BUNDLE_VAR_baseline_connection
+4. Carregar variáveis: set -a && source .env && set +a
+5. Validar: ./.tools/databricks-cli/databricks bundle validate -t dev
+6. Deploy: ./.tools/databricks-cli/databricks bundle deploy -t dev
 ```
 
 **Assistente deve perguntar:**
-- "Você tem acesso ao terminal local com Databricks CLI?"
-- "Qual modo você vai usar: workspace files ou bundle?"
+- "Você quer começar pelo setup simples ou pelo setup completo?"
+- "Se for setup completo: você tem acesso ao terminal local com Databricks CLI?"
+- "Se for setup completo: qual modo você vai usar, workspace files ou bundle?"
 
 **Checkpoint de avanço:**
-> "Execute o bundle validate (modo B) ou abra o projeto no workspace e confirme que `notebooks/06_workspace_manual_runbook.py` está acessível (modo A)."
+> "Se for setup simples: confirme que `version_a_sql_public/00_start_here` está acessível."
+>
+> "Se for setup completo: execute o bundle validate (modo B) ou abra o projeto no workspace e confirme que `notebooks/06_workspace_manual_runbook.py` está acessível (modo A)."
 
 **Erros comuns:**
 - "O import de `course_lakeflow` falha" → `SRC_ROOT` não está no `sys.path`. Verificar resolução do `PROJECT_ROOT` no notebook.
 - "Não encontro o arquivo de configuração" → O projeto foi importado como `.dbc` sem os arquivos de suporte. Use o guia `workspace_direct_setup.md`.
 - "BUNDLE_VAR_dashboard_warehouse_id não reconhecida" → Variável não carregada no shell. Rode `set -a && source .env && set +a`.
+- "Catalog 'main' was not found" → O aluno está com uma versão antiga do projeto ou com `dev.yml` desatualizado. No fluxo atual o catálogo deve ser `workspace`.
 
 ---
 
@@ -168,14 +217,27 @@ Se o aluno não conseguir descrever o fluxo, o assistente explica a arquitetura 
 - Ou via bundle: job `setup_workspace_job`
 
 **O assistente explica:**
-> "Este notebook provisiona os schemas e volumes onde os dados vão ser armazenados. Pense como o `CREATE DATABASE` + `mkdir` do seu Lakehouse. Sem isso, nem o gerador nem a pipeline conseguem escrever."
+> "Este notebook provisiona os schemas e volumes onde os dados vão ser armazenados. Pense como o `CREATE DATABASE` + `mkdir` do seu Lakehouse. Sem isso, nem o gerador nem a pipeline conseguem escrever. No setup completo, ele também pode criar a `CONNECTION` e o `FOREIGN CATALOG adventureworks_federated` automaticamente quando as credenciais são fornecidas."
+
+**Se o aluno escolheu o setup completo com federation, o assistente deve pedir estes campos antes de avançar:**
+- `baseline_host`
+- `baseline_port`
+- `baseline_user`
+- `baseline_password`
+- `baseline_database`
+- `baseline_catalog`
+- `baseline_connection`
 
 **Checkpoint de avanço:**
 > "O notebook rodou sem erro? Verifique no Unity Catalog se o schema e o volume foram criados."
+>
+> "Se você escolheu federation: confirme também se o catálogo `adventureworks_federated` apareceu em Catalog Explorer."
 
 **Erros comuns:**
 - "Permission denied no Unity Catalog" → Permissões de catálogo não configuradas para o usuário.
 - "Volume já existe" → Idempotente — pode ignorar o aviso.
+- "CREATE CONNECTION falhou" → credenciais inválidas, host/porta incorretos ou falta da permissão `CREATE CONNECTION`.
+- "CREATE FOREIGN CATALOG falhou" → a connection foi criada, mas o banco externo não está acessível ou o nome do database está incorreto.
 
 ---
 
@@ -194,6 +256,8 @@ Se o aluno não conseguir descrever o fluxo, o assistente explica a arquitetura 
 > "As tabelas `sales_profile_weekday`, `sales_profile_product_mix` e `sales_profile_territory_mix` foram criadas? Execute `SELECT * FROM sales_profile_weekday LIMIT 5` e confirme que têm dados."
 
 **Pré-requisito:** A Lakehouse Federation com o catálogo `adventureworks_federated` precisa estar configurada. Ver `docs/federation_setup.md`.
+
+**Regra importante:** esta etapa só existe no **setup completo**. Se o aluno estiver no setup simples, o assistente deve redirecionar para a trilha `version_a_sql_public`.
 
 ---
 
