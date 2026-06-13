@@ -3,7 +3,7 @@
 # MAGIC <div style="background:linear-gradient(135deg,#0077B6 0%,#2A9D8F 100%);color:#fff;padding:44px 38px;border-radius:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;box-shadow:0 6px 24px rgba(0,119,182,.25)">
 # MAGIC   <div style="font-size:.85em;text-transform:uppercase;letter-spacing:.12em;opacity:.85;margin-bottom:8px">PySpark no Databricks Free · bootstrap · ~2 min</div>
 # MAGIC   <h1 style="font-size:2.4em;margin:0 0 14px;line-height:1.15;font-weight:700">Baixar curso completo (PT-BR)</h1>
-# MAGIC   <p style="margin:0;font-size:1.1em;opacity:.95;line-height:1.55">Este notebook é a porta de entrada. Cole sua <strong>chave de acesso</strong> e rode todas as células — os <strong>13 notebooks do curso</strong> + <strong>assistente AI Athena</strong> em português vão aparecer no seu workspace. A versão em inglês sai em breve.</p>
+# MAGIC   <p style="margin:0;font-size:1.1em;opacity:.95;line-height:1.55">Este notebook é a porta de entrada. Cole sua <strong>chave de acesso</strong> e rode todas as células — os <strong>13 notebooks do curso</strong> + <strong>assistente AI Athena</strong> em português vão aparecer no seu workspace.</p>
 # MAGIC </div>
 
 # COMMAND ----------
