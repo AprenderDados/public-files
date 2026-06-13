@@ -26,7 +26,7 @@
 # COMMAND ----------
 
 # 👇 COLE SUA CHAVE DE ACESSO AQUI (entre as aspas) 👇
-ACCESS_KEY = ""
+ACCESS_KEY = "NOVO-ASSOCIATE-PT-2026"  # ⚠️ modo teste — substituir por "" antes do lançamento
 
 # COMMAND ----------
 

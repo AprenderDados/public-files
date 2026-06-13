@@ -26,7 +26,7 @@
 # COMMAND ----------
 
 # 👇 COLE SUA CHAVE DE ACESSO AQUI (entre as aspas) 👇
-ACCESS_KEY = ""
+ACCESS_KEY = "PYSPARK-FREE-PT-2026"  # ⚠️ modo teste — substituir por "" antes do lançamento
 
 # COMMAND ----------
 
@@ -137,6 +137,21 @@ for rel_path, content in bundle["notebooks"].items():
     written.append(rel_path)
 
 print(f"✅ Gravados {len(written)} notebooks em {target_root}\n")
+
+# Persiste a chave no workspace do aluno para o _assistant_runtime pegar
+# automaticamente em qualquer notebook do curso. Roda silencioso; se falhar,
+# o aluno ainda pode definir SKILL_ACCESS_KEY manualmente.
+try:
+    _current_user = spark.sql("SELECT current_user()").first()[0]
+    _key_path = f"/Workspace/Users/{_current_user}/.pyspark_databricks_free_key"
+    with open(_key_path, "w") as _kf:
+        _kf.write(ACCESS_KEY.strip())
+    print(f"🔑 Chave persistida em {_key_path}")
+    print("   Os notebooks com o assistente AI vão pegar a chave automaticamente.")
+except Exception as _exc:
+    print(f"⚠️  Não consegui persistir a chave ({_exc}).")
+    print("   No notebook do assistente, defina SKILL_ACCESS_KEY = '...' manualmente.")
+
 
 # Agrupa por idioma para imprimir bonitinho
 by_lang: dict[str, list[str]] = {}
