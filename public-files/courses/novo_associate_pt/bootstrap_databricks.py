@@ -3,7 +3,7 @@
 # MAGIC <div style="background:linear-gradient(135deg,#E63946 0%,#F77F00 100%);color:#fff;padding:44px 38px;border-radius:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;box-shadow:0 6px 24px rgba(230,57,70,.25)">
 # MAGIC   <div style="font-size:.85em;text-transform:uppercase;letter-spacing:.12em;opacity:.85;margin-bottom:8px">Novo Associate 2026 &middot; bootstrap &middot; ~2 min</div>
 # MAGIC   <h1 style="font-size:2.4em;margin:0 0 14px;line-height:1.15;font-weight:700">Baixar curso completo (PT-BR)</h1>
-# MAGIC   <p style="margin:0;font-size:1.1em;opacity:.95;line-height:1.55">Cole sua <strong>chave de acesso</strong> e rode todas as c&#xE9;lulas &mdash; os <strong>16 notebooks</strong> v&#xE3;o aparecer diretamente em <code>novo_associate/</code> no seu workspace.</p>
+# MAGIC   <p style="margin:0;font-size:1.1em;opacity:.95;line-height:1.55">Cole sua <strong>chave de acesso</strong> e rode todas as c&#xE9;lulas &mdash; os <strong>17 cadernos</strong> + Athena v&#xE3;o aparecer diretamente em <code>novo_associate/</code> no seu workspace.</p>
 # MAGIC </div>
 
 # COMMAND ----------
@@ -14,8 +14,8 @@
 # MAGIC   <ol style="margin:0;padding-left:22px;color:#1D1F23;line-height:1.7">
 # MAGIC     <li>Baixa payload criptografado (~700 KB) do reposit&#xF3;rio p&#xFA;blico</li>
 # MAGIC     <li>Descriptografa em mem&#xF3;ria com sua chave &mdash; nunca sai do workspace</li>
-# MAGIC     <li>Materializa os 16 notebooks diretamente em <code>novo_associate/</code></li>
-# MAGIC     <li>Persiste a chave para a Athena (notebook 15) encontrar automaticamente</li>
+# MAGIC     <li>Materializa os 17 cadernos + Athena diretamente em <code>novo_associate/</code></li>
+# MAGIC     <li>Persiste a chave para o <code>athena.py</code> encontrar automaticamente</li>
 # MAGIC   </ol>
 # MAGIC </div>
 # MAGIC <div style="padding:14px 20px;border-radius:8px;border-left:5px solid #C73E1D;background:#FFF0EC;font-family:-apple-system,sans-serif;margin:12px 0">
@@ -136,5 +136,5 @@ except Exception as e:
 # MAGIC <div style="background:linear-gradient(135deg,#E63946,#F77F00);color:#fff;padding:28px 32px;border-radius:14px;font-family:-apple-system,sans-serif;margin:24px 0;text-align:center">
 # MAGIC   <div style="font-size:2.4em;margin-bottom:8px">&#x1F389;</div>
 # MAGIC   <h2 style="margin:0 0 12px;color:#fff;font-size:1.6em;border:none">Tudo pronto!</h2>
-# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Abra <strong>novo_associate/</strong> no seu workspace.<br>Comece pelo <code>00_introducao_ao_databricks.py</code> e siga a ordem dos n&#xFA;meros.<br>Use <code>15_assistente_ai_athena.py</code> para tirar d&#xFA;vidas com a Athena.</p>
+# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Abra <strong>novo_associate/</strong> no seu workspace.<br>Comece pelo <code>00_introducao_ao_databricks.py</code> e siga a ordem dos n&#xFA;meros.<br>Use <code>athena.py</code> para tirar d&#xFA;vidas com a Athena.</p>
 # MAGIC </div>
