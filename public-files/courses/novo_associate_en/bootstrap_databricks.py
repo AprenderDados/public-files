@@ -15,7 +15,7 @@
 # MAGIC     <li>Downloads an <strong>encrypted payload</strong> (~700 KB) from a public repository</li>
 # MAGIC     <li>Asks for your <strong>access key</strong> (delivered after purchase)</li>
 # MAGIC     <li>Decrypts in memory — your key never leaves your workspace</li>
-# MAGIC     <li>Materializes 19 notebooks into <code>novo_associate/en/</code></li>
+# MAGIC     <li>Materializes 19 notebooks into <code>novo_associate/</code></li>
 # MAGIC   </ol>
 # MAGIC </div>
 # MAGIC <div style="padding:14px 20px;border-radius:8px;border-left:5px solid #C73E1D;background:#FFF0EC;font-family:-apple-system,sans-serif;margin:12px 0">
@@ -26,7 +26,7 @@
 # COMMAND ----------
 
 # 👇 PASTE YOUR ACCESS KEY HERE (between the quotes) 👇
-ACCESS_KEY = "NOVO-ASSOCIATE-EN-2026"  # ⚠️ test mode — set to "" before launch
+ACCESS_KEY = ""  # 👇 paste your key here (see Setup.P3 on the platform)
 
 # COMMAND ----------
 
@@ -128,8 +128,13 @@ notebook_path = (
 target_root = "/Workspace" + os.path.dirname(notebook_path) + "/novo_associate"
 os.makedirs(target_root, exist_ok=True)
 
+# Strip leading language folder (en/ or pt_br/) — notebooks land directly in target_root
+def _strip_prefix(p):
+    _, sep, rest = p.partition("/")
+    return rest if sep else p
+
 # Remove stale notebooks — .py files present in the workspace but NOT in the current payload
-new_files = set(bundle["notebooks"].keys())
+new_files = set(_strip_prefix(p) for p in bundle["notebooks"].keys())
 for root, dirs, files in os.walk(target_root):
     for fname in files:
         if not fname.endswith(".py"):
@@ -142,24 +147,16 @@ for root, dirs, files in os.walk(target_root):
 
 written = []
 for rel_path, content in bundle["notebooks"].items():
-    target = os.path.join(target_root, rel_path)
+    final_path = _strip_prefix(rel_path)
+    target = os.path.join(target_root, final_path)
     os.makedirs(os.path.dirname(target), exist_ok=True)
     with open(target, "w", encoding="utf-8") as f:
         f.write(content)
-    written.append(rel_path)
+    written.append(final_path)
 
 print(f"✅ Written {len(written)} notebooks to {target_root}\n")
-
-# Group by language for display
-by_lang: dict[str, list[str]] = {}
-for rel_path in written:
-    lang, _, name = rel_path.partition("/")
-    by_lang.setdefault(lang, []).append(name)
-
-for lang, names in sorted(by_lang.items()):
-    print(f"📂 {lang}/ ({len(names)} notebooks)")
-    for name in sorted(names):
-        print(f"   - {name}")
+for name in sorted(written):
+    print(f"   - {name}")
 
 # COMMAND ----------
 
@@ -167,5 +164,5 @@ for lang, names in sorted(by_lang.items()):
 # MAGIC <div style="background:linear-gradient(135deg,#2A9D8F,#0077B6);color:#fff;padding:28px 32px;border-radius:14px;font-family:-apple-system,sans-serif;margin:24px 0;text-align:center">
 # MAGIC   <div style="font-size:2.4em;margin-bottom:8px">🎉</div>
 # MAGIC   <h2 style="margin:0 0 12px;color:#fff;font-size:1.6em;border:none">All done!</h2>
-# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Open the <strong>novo_associate/</strong> folder in your workspace.<br>Start with <code>en/00_introduction_to_databricks.py</code> and follow the numbered sequence.</p>
+# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Open the <strong>novo_associate/</strong> folder in your workspace.<br>Start with <code>00_introduction_to_databricks.py</code> and follow the numbered sequence.</p>
 # MAGIC </div>

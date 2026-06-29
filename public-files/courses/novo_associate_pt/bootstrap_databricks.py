@@ -15,7 +15,7 @@
 # MAGIC     <li>Baixa um <strong>payload criptografado</strong> (~680 KB) de um repositório público</li>
 # MAGIC     <li>Pede sua <strong>chave de acesso</strong> (entregue após a compra)</li>
 # MAGIC     <li>Descriptografa em memória — a chave nunca sai do seu workspace</li>
-# MAGIC     <li>Materializa os 22 notebooks em <code>novo_associate/pt_br/</code></li>
+# MAGIC     <li>Materializa os 22 notebooks em <code>novo_associate/</code></li>
 # MAGIC   </ol>
 # MAGIC </div>
 # MAGIC <div style="padding:14px 20px;border-radius:8px;border-left:5px solid #C73E1D;background:#FFF0EC;font-family:-apple-system,sans-serif;margin:12px 0">
@@ -26,7 +26,7 @@
 # COMMAND ----------
 
 # 👇 COLE SUA CHAVE DE ACESSO AQUI (entre as aspas) 👇
-ACCESS_KEY = "NOVO-ASSOCIATE-PT-2026"  # ⚠️ modo teste — substituir por "" antes do lançamento
+ACCESS_KEY = ""  # 👇 cole sua chave aqui (veja Setup.P3 na plataforma)
 
 # COMMAND ----------
 
@@ -128,9 +128,14 @@ notebook_path = (
 target_root = "/Workspace" + os.path.dirname(notebook_path) + "/novo_associate"
 os.makedirs(target_root, exist_ok=True)
 
+# Remove o prefixo de idioma (pt_br/ ou en/) — notebooks ficam direto em target_root
+def _strip_prefix(p):
+    _, sep, rest = p.partition("/")
+    return rest if sep else p
+
 # Remover notebooks obsoletos — arquivos .py que existem no workspace mas NÃO
 # fazem parte do payload atual (evita cadernos velhos com numeração antiga).
-new_files = set(bundle["notebooks"].keys())
+new_files = set(_strip_prefix(p) for p in bundle["notebooks"].keys())
 for root, dirs, files in os.walk(target_root):
     for fname in files:
         if not fname.endswith(".py"):
@@ -143,24 +148,16 @@ for root, dirs, files in os.walk(target_root):
 
 written = []
 for rel_path, content in bundle["notebooks"].items():
-    target = os.path.join(target_root, rel_path)
+    final_path = _strip_prefix(rel_path)
+    target = os.path.join(target_root, final_path)
     os.makedirs(os.path.dirname(target), exist_ok=True)
     with open(target, "w", encoding="utf-8") as f:
         f.write(content)
-    written.append(rel_path)
+    written.append(final_path)
 
 print(f"✅ Gravados {len(written)} notebooks em {target_root}\n")
-
-# Agrupa por idioma para imprimir bonitinho
-by_lang: dict[str, list[str]] = {}
-for rel_path in written:
-    lang, _, name = rel_path.partition("/")
-    by_lang.setdefault(lang, []).append(name)
-
-for lang, names in sorted(by_lang.items()):
-    print(f"📂 {lang}/ ({len(names)} notebooks)")
-    for name in sorted(names):
-        print(f"   - {name}")
+for name in sorted(written):
+    print(f"   - {name}")
 
 # COMMAND ----------
 
@@ -168,5 +165,5 @@ for lang, names in sorted(by_lang.items()):
 # MAGIC <div style="background:linear-gradient(135deg,#2A9D8F,#0077B6);color:#fff;padding:28px 32px;border-radius:14px;font-family:-apple-system,sans-serif;margin:24px 0;text-align:center">
 # MAGIC   <div style="font-size:2.4em;margin-bottom:8px">🎉</div>
 # MAGIC   <h2 style="margin:0 0 12px;color:#fff;font-size:1.6em;border:none">Tudo pronto!</h2>
-# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Abra a pasta <strong>novo_associate/</strong> no seu workspace.<br>Comece pelo <code>pt_br/00_introducao_ao_databricks.py</code> e siga a ordem dos números.</p>
+# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Abra a pasta <strong>novo_associate/</strong> no seu workspace.<br>Comece pelo <code>00_introducao_ao_databricks.py</code> e siga a ordem dos números.</p>
 # MAGIC </div>
