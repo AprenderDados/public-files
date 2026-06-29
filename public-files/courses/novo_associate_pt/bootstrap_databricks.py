@@ -113,6 +113,16 @@ print(f"   Curso:      {metadata.get('course', '?')}")
 print(f"   Idiomas:    {', '.join(metadata.get('languages', []))}")
 print(f"   Notebooks:  {metadata.get('notebook_count', len(bundle.get('notebooks', {})))}")
 
+# Persiste a chave para a Athena conseguir carregá-la automaticamente
+try:
+    _current_user = spark.sql("SELECT current_user()").first()[0]
+    _key_file = f"/Workspace/Users/{_current_user}/.novo_associate_pt_key"
+    with open(_key_file, "w") as _kf:
+        _kf.write(ACCESS_KEY.strip())
+    print(f"   Chave persistida → {_key_file}")
+except Exception as _e:
+    print(f"   ⚠️  Não foi possível persistir a chave: {_e}")
+
 # COMMAND ----------
 
 # MAGIC %md
