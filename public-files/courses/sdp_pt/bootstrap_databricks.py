@@ -3,7 +3,7 @@
 # MAGIC <div style="background:linear-gradient(135deg,#2A9D8F 0%,#0077B6 100%);color:#fff;padding:44px 38px;border-radius:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;box-shadow:0 6px 24px rgba(42,157,143,.25)">
 # MAGIC   <div style="font-size:.85em;text-transform:uppercase;letter-spacing:.12em;opacity:.85;margin-bottom:8px">Spark Declarative Pipelines · bootstrap · ~2 min</div>
 # MAGIC   <h1 style="font-size:2.4em;margin:0 0 14px;line-height:1.15;font-weight:700">Baixar curso completo (PT-BR)</h1>
-# MAGIC   <p style="margin:0;font-size:1.1em;opacity:.95;line-height:1.55">Este notebook é a porta de entrada. Cole sua <strong>chave de acesso</strong> e rode todas as células — os <strong>9 notebooks</strong> do curso em português vão aparecer no seu workspace.</p>
+# MAGIC   <p style="margin:0;font-size:1.1em;opacity:.95;line-height:1.55">Este notebook é a porta de entrada. Cole sua <strong>chave de acesso</strong> e rode todas as células — os <strong>9 notebooks do curso + o assistente AI Athena</strong> em português vão aparecer no seu workspace.</p>
 # MAGIC </div>
 
 # COMMAND ----------
@@ -15,7 +15,7 @@
 # MAGIC     <li>Baixa um <strong>payload criptografado</strong> de um repositório público</li>
 # MAGIC     <li>Pede sua <strong>chave de acesso</strong> (entregue após a compra)</li>
 # MAGIC     <li>Descriptografa em memória — a chave nunca sai do seu workspace</li>
-# MAGIC     <li>Materializa os 9 notebooks em <code>sdp/pt_br/</code></li>
+# MAGIC     <li>Materializa os notebooks em <code>sdp/pt_br/</code> e persiste a chave para o assistente AI Athena</li>
 # MAGIC   </ol>
 # MAGIC </div>
 # MAGIC <div style="padding:14px 20px;border-radius:8px;border-left:5px solid #C73E1D;background:#FFF0EC;font-family:-apple-system,sans-serif;margin:12px 0">
@@ -116,6 +116,23 @@ print(f"   Notebooks:  {metadata.get('notebook_count', len(bundle.get('notebooks
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ## Persistir a chave (para o assistente AI Athena)
+
+# COMMAND ----------
+
+try:
+    _current_user = spark.sql("SELECT current_user()").first()[0]
+    _key_path = f"/Workspace/Users/{_current_user}/.sdp_pt_key"
+    with open(_key_path, "w") as _kf:
+        _kf.write(ACCESS_KEY.strip())
+    print(f"🔑 Chave persistida em {_key_path} — o notebook do assistente (Athena) vai carregá-la automaticamente.")
+except Exception as exc:
+    print(f"⚠️  Não foi possível persistir a chave automaticamente ({exc}). "
+          f"Defina SKILL_ACCESS_KEY manualmente no notebook do assistente se precisar.")
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ## Materializar os notebooks no workspace
 
 # COMMAND ----------
@@ -164,5 +181,5 @@ for lang, names in sorted(by_lang.items()):
 # MAGIC <div style="background:linear-gradient(135deg,#2A9D8F,#0077B6);color:#fff;padding:28px 32px;border-radius:14px;font-family:-apple-system,sans-serif;margin:24px 0;text-align:center">
 # MAGIC   <div style="font-size:2.4em;margin-bottom:8px">🎉</div>
 # MAGIC   <h2 style="margin:0 0 12px;color:#fff;font-size:1.6em;border:none">Tudo pronto!</h2>
-# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Abra a pasta <strong>sdp/</strong> no seu workspace.<br>Comece pelo primeiro notebook em <code>pt_br/</code> e siga a ordem dos números.</p>
+# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Abra a pasta <strong>sdp/</strong> no seu workspace.<br>Comece pelo primeiro notebook em <code>pt_br/</code> e siga a ordem dos números. O último (<code>10_assistente_ai_athena</code>) liga você à Athena, o assistente AI do curso.</p>
 # MAGIC </div>
