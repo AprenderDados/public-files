@@ -26,7 +26,7 @@
 # COMMAND ----------
 
 # 👇 COLE SUA CHAVE DE ACESSO AQUI (entre as aspas) 👇
-ACCESS_KEY = "PROFESSIONAL-DE2-PT-2026"  # ⚠️ modo teste — substituir por "" antes do lançamento
+ACCESS_KEY = ""  # 👇 cole sua chave aqui (peça ao professor ou veja a lição de Setup na plataforma)
 
 # COMMAND ----------
 

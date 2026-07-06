@@ -26,7 +26,7 @@
 # COMMAND ----------
 
 # 👇 PASTE YOUR ACCESS KEY HERE (inside the quotes) 👇
-ACCESS_KEY = "GEN-AI-ENGINEER-EN-2026"  # ⚠️ test mode — replace with "" before launch
+ACCESS_KEY = ""  # 👇 paste your key here (ask your instructor or see the Setup lesson)
 
 # COMMAND ----------
 
