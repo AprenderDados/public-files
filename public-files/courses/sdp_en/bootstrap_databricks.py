@@ -46,6 +46,10 @@ PAYLOAD_URLS = [
     "https://raw.githubusercontent.com/AprenderDados/public-files/main/public-files/courses/sdp_en/payload.private.json",
 ]
 
+PROJECT_PAYLOAD_URLS = [
+    "https://raw.githubusercontent.com/AprenderDados/public-files/main/public-files/courses/sdp_en/project_payload.private.json",
+]
+
 PBKDF2_ITERATIONS = 200_000
 PAYLOAD_VERSION = 1
 
@@ -175,11 +179,58 @@ for lang, names in sorted(by_lang.items()):
     for name in sorted(names):
         print(f"   - {name}")
 
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Materialize the FULL PROJECT (folder `projeto/`)
+# MAGIC
+# MAGIC The whole course narrates a real engineering project — config YAMLs, Python classes, tests and the project assistant. The cells below download and install that project into your workspace with **per-file integrity verification** (SHA-256). Note: the project content is in Portuguese (PT-BR).
+
+# COMMAND ----------
+
+print("Downloading the project payload...")
+_proj_payload = fetch_payload(PROJECT_PAYLOAD_URLS)
+_proj_bundle = json.loads(decode_payload(_proj_payload, ACCESS_KEY.strip()))
+_proj_meta = _proj_bundle.get("metadata", {})
+print(f"Project payload decrypted. {_proj_meta.get('file_count')} arquivos, {_proj_meta.get('total_bytes'):,} bytes")
+
+_proj_root = os.path.join(target_root, _proj_meta.get("target_folder", "projeto"))
+os.makedirs(_proj_root, exist_ok=True)
+print(f"Writing the project to {_proj_root}")
+
+# limpar obsoletos SÓ dentro de projeto/
+_expected = set(_proj_bundle["files"].keys())
+for _r, _d, _fs in os.walk(_proj_root):
+    for _fname in _fs:
+        _full = os.path.join(_r, _fname)
+        _rel = os.path.relpath(_full, _proj_root)
+        if _rel not in _expected:
+            os.remove(_full)
+            print(f"  obsoleto removido: {_rel}")
+
+_bad = []
+for _rel, _content in _proj_bundle["files"].items():
+    _target = os.path.join(_proj_root, _rel)
+    os.makedirs(os.path.dirname(_target), exist_ok=True)
+    with open(_target, "w", encoding="utf-8") as _f:
+        _f.write(_content)
+    with open(_target, "r", encoding="utf-8") as _f:
+        _back = _f.read()
+    import hashlib as _hl
+    if _hl.sha256(_back.encode("utf-8")).hexdigest() != _proj_bundle["hashes"][_rel]:
+        _bad.append(_rel)
+
+if _bad:
+    raise SystemExit(f"INTEGRITY ERROR — corrupted/missing files: {_bad[:10]}")
+print(f"OK: {len(_proj_bundle['files'])} arquivos verified via SHA-256 — no file lost or corrupted.")
+print(f"Start with the notebook: projeto/00_ABRA_AQUI")
+
 # COMMAND ----------
 
 # MAGIC %md-sandbox
 # MAGIC <div style="background:linear-gradient(135deg,#2A9D8F,#0077B6);color:#fff;padding:28px 32px;border-radius:14px;font-family:-apple-system,sans-serif;margin:24px 0;text-align:center">
 # MAGIC   <div style="font-size:2.4em;margin-bottom:8px">🎉</div>
 # MAGIC   <h2 style="margin:0 0 12px;color:#fff;font-size:1.6em;border:none">All set!</h2>
-# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Open the <strong>sdp/</strong> folder in your workspace.<br>Start with the first notebook in <code>en/</code> and follow the numbering order. The last one (<code>10_assistant_ai_athena</code>) connects you to Athena, the course's AI assistant.</p>
+# MAGIC   <p style="margin:0;font-size:1.05em;opacity:.95;line-height:1.55">Open the <strong>sdp/</strong> folder in your workspace.<br>Start with the first notebook in <code>en/</code> and follow the numbering order. The last one (<code>10_assistant_ai_athena</code>) connects you to Athena, the course's AI assistant.<br>The <strong>full project</strong> lives in <code>sdp/projeto/</code> — open <code>00_ABRA_AQUI</code> (project content is in PT-BR).</p>
 # MAGIC </div>
